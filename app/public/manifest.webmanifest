@@ -1,0 +1,13 @@
+{
+  "name": "Njia — Matatu Routes & Fares",
+  "short_name": "Njia",
+  "description": "Real matatu routes, stages and fares for Nairobi. Works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f5f2",
+  "theme_color": "#046A38",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
