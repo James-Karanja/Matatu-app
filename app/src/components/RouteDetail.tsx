@@ -1,6 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { routesById } from '../data/routes';
-import { stagesById } from '../data/stages';
+import { routesById, stagesById } from '../data/network';
 
 // MapLibre is ~270KB gzipped — keep it out of the first-load bundle and fetch
 // it only when someone opens a route detail page.
@@ -42,7 +41,10 @@ export default function RouteDetail({ routeId }: { routeId: string }) {
       </Suspense>
 
       <div className="card">
-        <h3>Fares (KES)</h3>
+        <h3>
+          Fares (KES)
+          {!route.fareVerified && <span className="fare-tag">typical range · to verify</span>}
+        </h3>
         <table className="fare-table">
           <tbody>
             <tr>
@@ -87,7 +89,8 @@ export default function RouteDetail({ routeId }: { routeId: string }) {
       </div>
 
       <p className="disclaimer">
-        Fares, stages and operators are indicative sample data pending field verification.
+        Route and stage data: Digital Matatus (digitalmatatus.com). Fares and operators are
+        indicative pending field verification.
       </p>
     </div>
   );

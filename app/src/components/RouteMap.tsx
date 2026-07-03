@@ -1,12 +1,16 @@
 import { useEffect, useRef } from 'react';
 import maplibregl, { type StyleSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { stagesById } from '../data/stages';
-import type { MatatuRoute } from '../data/routes';
+import { stagesById, type MatatuRoute } from '../data/network';
+import shapesJson from '../data/shapes.json';
 
-/* Straight segments between stages for now — real driven route shapes will
-   replace these once field mapping starts. OSM raster tiles layer over a
-   plain backdrop, so the route stays visible when tiles can't load. */
+/* Route lines come from the GTFS shapes (the actual driven path), simplified
+   at ingest time; stage-to-stage straight segments are the fallback. This
+   module is lazy-loaded, so shapes.json stays out of the first-load bundle.
+   OSM raster tiles layer over a plain backdrop, so the route stays visible
+   when tiles can't load. */
+
+const SHAPES = shapesJson as unknown as Record<string, [number, number][]>;
 
 export default function RouteMap({ route }: { route: MatatuRoute }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -15,11 +19,12 @@ export default function RouteMap({ route }: { route: MatatuRoute }) {
     const container = containerRef.current;
     if (!container) return;
 
-    const coords = route.stages.map((id) => {
+    const stageCoords = route.stages.map((id) => {
       const s = stagesById[id];
       return [s.lng, s.lat] as [number, number];
     });
-    const bounds = coords.reduce(
+    const coords = SHAPES[route.id] ?? stageCoords;
+    const bounds = [...coords, ...stageCoords].reduce(
       (b, c) => b.extend(c),
       new maplibregl.LngLatBounds(coords[0], coords[0])
     );
@@ -53,7 +58,7 @@ export default function RouteMap({ route }: { route: MatatuRoute }) {
                   name: s.name,
                   terminal: i === 0 || i === route.stages.length - 1,
                 },
-                geometry: { type: 'Point', coordinates: [s.lng, s.lat] },
+                geometry: { type: 'Point', coordinates: [s.lng, s.lat] as [number, number] },
               };
             }),
           },

@@ -1,15 +1,28 @@
-import { ROUTES } from '../data/routes';
-import { stagesById } from '../data/stages';
+import { useState } from 'react';
+import { ROUTES, stagesById } from '../data/network';
 
 export default function RouteList() {
-  const sorted = [...ROUTES].sort((a, b) => Number(a.number) - Number(b.number));
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? ROUTES.filter(
+        (r) => r.number.toLowerCase().includes(q) || r.nickname.toLowerCase().includes(q)
+      )
+    : ROUTES;
 
   return (
     <div className="route-list">
+      <input
+        className="filter-input"
+        placeholder="Filter by route number or name…"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
       <p className="hint">
-        {ROUTES.length} routes mapped · sample data, field verification in progress
+        {filtered.length} of {ROUTES.length} routes · Digital Matatus data, field verification
+        in progress
       </p>
-      {sorted.map((r) => {
+      {filtered.map((r) => {
         const first = stagesById[r.stages[0]];
         const last = stagesById[r.stages[r.stages.length - 1]];
         return (
@@ -20,7 +33,7 @@ export default function RouteList() {
                 {first.name} ↔ {last.name}
               </div>
               <div className="trip-sub">
-                {r.corridor} · {r.stages.length} stages · {r.sacco}
+                {r.nickname} · {r.stages.length} stages
               </div>
               <div className="trip-fare">
                 KES {r.fare.offPeak[0]}–{r.fare.peak[1]}
@@ -29,6 +42,7 @@ export default function RouteList() {
           </a>
         );
       })}
+      {filtered.length === 0 && <p className="empty">No route matches “{query}”.</p>}
     </div>
   );
 }
