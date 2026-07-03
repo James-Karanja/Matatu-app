@@ -142,6 +142,9 @@ export default function About() {
           <li>Crowdsourced fare updates rolled into the data</li>
           <li>Live matatu positions, corridor by corridor</li>
         </ul>
+        <p className="meta">
+          Street team? <a href="#/posters">Generate a stage poster →</a>
+        </p>
       </div>
     </div>
   );

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import FindTrip from './components/FindTrip';
 import RouteList from './components/RouteList';
 import RouteDetail from './components/RouteDetail';
 import About from './components/About';
+
+// Street-team tool, rarely opened — keep the QR library out of the main bundle.
+const PosterPage = lazy(() => import('./components/PosterPage'));
 
 function useHash(): string {
   const [hash, setHash] = useState(window.location.hash);
@@ -48,6 +51,10 @@ export default function App() {
           <RouteList />
         ) : hash === '#/about' ? (
           <About />
+        ) : hash === '#/posters' ? (
+          <Suspense fallback={<p className="empty">Loading…</p>}>
+            <PosterPage />
+          </Suspense>
         ) : (
           <FindTrip fromId={fromId} toId={toId} setFromId={setFromId} setToId={setToId} />
         )}
