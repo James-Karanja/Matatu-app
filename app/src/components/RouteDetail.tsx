@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { routesById, stagesById } from '../data/network';
+import ReportSheet from './ReportSheet';
 
 // MapLibre is ~270KB gzipped — keep it out of the first-load bundle and fetch
 // it only when someone opens a route detail page.
@@ -71,6 +72,8 @@ export default function RouteDetail({ routeId }: { routeId: string }) {
         </p>
         {route.notes && <p className="note">{route.notes}</p>}
       </div>
+
+      <ReportSheet route={route} />
 
       <div className="card">
         <h3>Stages ({route.stages.length})</h3>
