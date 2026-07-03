@@ -297,6 +297,21 @@ async function main() {
     }
   }
 
+  // crowd-confirmed fares (scripts/apply-fare-reports.mjs) take precedence
+  // over both defaults and curated samples, so regenerating from a fresh
+  // feed never loses them
+  const crowdPath = join(OUT_DIR, 'fare-overrides.json');
+  if (existsSync(crowdPath)) {
+    const crowd = JSON.parse(readFileSync(crowdPath, 'utf8'));
+    for (const r of routes) {
+      const o = crowd[r.id];
+      if (o?.fare) {
+        r.fare = { ...r.fare, ...o.fare };
+        r.fareVerified = true;
+      }
+    }
+  }
+
   // keep only stages actually referenced by emitted routes
   const referenced = new Set(routes.flatMap((r) => r.stages));
   const finalStages = stages.filter((s) => referenced.has(s.id));
