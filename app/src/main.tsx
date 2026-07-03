@@ -10,7 +10,17 @@ createRoot(document.getElementById('root')!).render(
 );
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+  window.addEventListener('load', async () => {
+    const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+    // A new worker installing while an old one controls the page means a new
+    // app version is cached and ready — tell the UI so it can offer a refresh.
+    const announce = () => window.dispatchEvent(new CustomEvent('njia:sw-update'));
+    if (reg.waiting && navigator.serviceWorker.controller) announce();
+    reg.addEventListener('updatefound', () => {
+      const next = reg.installing;
+      next?.addEventListener('statechange', () => {
+        if (next.state === 'installed' && navigator.serviceWorker.controller) announce();
+      });
+    });
   });
 }

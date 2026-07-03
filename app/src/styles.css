@@ -470,6 +470,109 @@ main {
   vertical-align: middle;
 }
 
+/* ── Report sheet ──────────────────────────────────────── */
+.report-open {
+  display: block;
+  width: 100%;
+  background: #fff;
+  border: 1.5px dashed var(--green);
+  color: var(--green-dark);
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 12px;
+  padding: 0.7rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+.report-sheet .chips {
+  margin: 0.4rem 0 0.7rem;
+}
+.chip-on {
+  border-color: var(--green);
+  background: #e7f2ea;
+  color: var(--green-dark);
+  font-weight: 700;
+}
+.report-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+}
+.btn {
+  display: inline-block;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--green-dark);
+  border: 1.5px solid var(--green);
+}
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--muted);
+}
+.btn-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.btn:disabled {
+  opacity: 0.45;
+}
+.report-done {
+  font-weight: 600;
+  color: var(--green-dark);
+  margin: 0.7rem 0 0.3rem;
+}
+
+/* ── Update toast ──────────────────────────────────────── */
+.update-toast {
+  position: fixed;
+  bottom: 4.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #131313;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+.update-toast button {
+  background: var(--yellow);
+  color: #131313;
+  border: none;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ── Contribute preview ────────────────────────────────── */
+.consent {
+  border-top: 1px solid var(--line);
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+}
+.tracer-status {
+  line-height: 1.7;
+}
+
 /* ── Bottom nav ────────────────────────────────────────── */
 .bottom-nav {
   position: fixed;

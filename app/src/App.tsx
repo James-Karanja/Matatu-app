@@ -24,6 +24,13 @@ export default function App() {
   const hash = useHash();
   const [fromId, setFromId] = useState('');
   const [toId, setToId] = useState('');
+  const [updateReady, setUpdateReady] = useState(false);
+
+  useEffect(() => {
+    const onUpdate = () => setUpdateReady(true);
+    window.addEventListener('njia:sw-update', onUpdate);
+    return () => window.removeEventListener('njia:sw-update', onUpdate);
+  }, []);
 
   const routeMatch = hash.match(/^#\/route\/(.+)$/);
   const activeTab = routeMatch ? '#/routes' : hash === '#/routes' || hash === '#/about' ? hash : '#/';
@@ -45,6 +52,14 @@ export default function App() {
           <FindTrip fromId={fromId} toId={toId} setFromId={setFromId} setToId={setToId} />
         )}
       </main>
+      {updateReady && (
+        <div className="update-toast" role="status">
+          <span>A new version is ready.</span>
+          <button type="button" onClick={() => window.location.reload()}>
+            Refresh
+          </button>
+        </div>
+      )}
       <nav className="bottom-nav">
         {TABS.map(([href, label]) => (
           <a key={href} href={href} className={activeTab === href ? 'active' : ''}>

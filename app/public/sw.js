@@ -1,7 +1,7 @@
 /* Njia offline cache: stale-while-revalidate for same-origin GET requests.
    Map tiles (cross-origin) are deliberately NOT cached — respects the OSM tile
    usage policy and keeps the cache small on low-storage devices. */
-const CACHE = 'njia-v1';
+const CACHE = 'njia-v2';
 
 self.addEventListener('install', () => {
   self.skipWaiting();
