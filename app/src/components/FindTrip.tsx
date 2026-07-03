@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { ROUTES } from '../data/routes';
-import { stagesById } from '../data/stages';
+import { ROUTES, stagesById, findStageByName, type Stage } from '../data/network';
 import { planTrips, type Leg, type Trip } from '../lib/planner';
 import StagePicker from './StagePicker';
 
@@ -11,12 +10,18 @@ interface Props {
   setToId: (id: string) => void;
 }
 
-const POPULAR: Array<[from: string, to: string, label: string]> = [
-  ['kencom', 'kawangware', 'Kencom → Kawangware'],
-  ['odeon', 'thika', 'Odeon → Thika'],
-  ['railways', 'rongai', 'Railways → Rongai'],
-  ['ambassadeur', 'umoja', 'Ambassadeur → Umoja'],
-];
+/* Well-known trips, resolved against whatever the current network data
+   calls those stages; pairs that don't resolve are simply not shown. */
+const POPULAR: Array<{ from: Stage; to: Stage }> = (
+  [
+    ['Kencom', 'Kawangware'],
+    ['Odeon', 'Thika'],
+    ['Railways', 'Rongai'],
+    ['Ambassadeur', 'Umoja'],
+  ] as Array<[string, string]>
+)
+  .map(([f, t]) => ({ from: findStageByName(f), to: findStageByName(t) }))
+  .filter((p): p is { from: Stage; to: Stage } => Boolean(p.from && p.to));
 
 function LegRow({ leg, step }: { leg: Leg; step: number }) {
   return (
@@ -104,21 +109,21 @@ export default function FindTrip({ fromId, toId, setFromId, setToId }: Props) {
         <TripCard key={i} trip={t} />
       ))}
 
-      {!fromId && !toId && (
+      {!fromId && !toId && POPULAR.length > 0 && (
         <div className="popular">
           <h3>Popular trips</h3>
           <div className="chips">
-            {POPULAR.map(([f, t, label]) => (
+            {POPULAR.map(({ from, to }) => (
               <button
-                key={label}
+                key={from.id + to.id}
                 type="button"
                 className="chip"
                 onClick={() => {
-                  setFromId(f);
-                  setToId(t);
+                  setFromId(from.id);
+                  setToId(to.id);
                 }}
               >
-                {label}
+                {from.name} → {to.name}
               </button>
             ))}
           </div>

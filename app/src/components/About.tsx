@@ -1,5 +1,4 @@
-import { DATA_VERSION, ROUTES } from '../data/routes';
-import { STAGES } from '../data/stages';
+import { DATA_VERSION, GENERATED_AT, ROUTES, STAGES } from '../data/network';
 
 export default function About() {
   return (
@@ -20,11 +19,20 @@ export default function About() {
       <div className="card">
         <h3>About the data</h3>
         <p>
-          This early version carries <strong>{ROUTES.length} routes and {STAGES.length} stages
-          of sample data</strong> while our mappers ride and verify every route. Fares, stage
-          positions and operators are indicative until then.
+          Routes, stages and headways come from the open{' '}
+          <strong>Digital Matatus</strong> dataset ({ROUTES.length} routes,{' '}
+          {STAGES.length} stages) — the pioneering mapping of Nairobi&apos;s matatu network by
+          the University of Nairobi C4DLab, Columbia University and MIT&apos;s Civic Data
+          Design Lab. See digitalmatatus.com.
         </p>
-        <p className="meta">Data version: {DATA_VERSION}</p>
+        <p>
+          Fares are indicative ranges: a few corridors carry field-checked samples, the rest
+          show a typical range until our fare verification catches up. Spot something wrong?
+          A report-a-fare feature is coming next.
+        </p>
+        <p className="meta">
+          Data version: {DATA_VERSION} · imported {GENERATED_AT}
+        </p>
       </div>
 
       <div className="card">
@@ -40,7 +48,7 @@ export default function About() {
         <h3>Coming next</h3>
         <ul className="plain-list">
           <li>Report a fare / suggest a route correction</li>
-          <li>Full Nairobi network, then Mombasa &amp; Kisumu</li>
+          <li>Fresh field verification of stages and fares</li>
           <li>Live matatu positions, corridor by corridor</li>
         </ul>
       </div>

@@ -4,8 +4,7 @@
    changing at a shared stage, or riding into the CBD and walking a few
    minutes to another terminus (most cross-town trips work this way). */
 
-import type { MatatuRoute } from '../data/routes';
-import type { Stage } from '../data/stages';
+import type { MatatuRoute, Stage } from '../data/network';
 
 export interface Leg {
   route: MatatuRoute;
@@ -61,12 +60,14 @@ export function planTrips(
   const toRoutes = routes.filter((r) => r.stages.includes(toId));
   const transfers: TransferTrip[] = [];
 
+  const stageSets = new Map(toRoutes.map((r) => [r.id, new Set(r.stages)]));
   for (const a of fromRoutes) {
     for (const b of toRoutes) {
       if (a.id === b.id) continue;
 
+      const bStages = stageSets.get(b.id)!;
       const shared = a.stages.filter(
-        (s) => s !== fromId && s !== toId && b.stages.includes(s)
+        (s) => s !== fromId && s !== toId && bStages.has(s)
       );
       if (shared.length > 0) {
         const best = shared
